@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Note Editor - Book Tracker</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <h1>Book Tracker</h1>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">GENERAL</div>
+                <nav class="sidebar-nav">
+                    <a href="home.html" class="nav-item">Dashboard</a>
+                    <a href="add-book.html" class="nav-item">Add Book</a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MY LIBRARY</div>
+                <nav class="sidebar-nav">
+                    <a href="my-library.html" class="nav-item">My Library</a>
+                    <a href="currently-reading.html" class="nav-item">Currently Reading</a>
+                    <a href="want-to-read.html" class="nav-item">Want to Read</a>
+                    <a href="read.html" class="nav-item">Read</a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">BROWSE</div>
+                <nav class="sidebar-nav">
+                    <a href="books.html" class="nav-item">All Books</a>
+                    <a href="authors.html" class="nav-item">Authors</a>
+                </nav>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div class="content-header">
+                <div class="header-spacer"></div>
+                <div class="user-controls">
+                    <button onclick="goBack()" class="btn-secondary">← Back</button>
+                    <span id="userDisplay"></span>
+                    <button onclick="logout()" class="btn-secondary">Logout</button>
+                </div>
+            </div>
+
+            <!-- Book Info Header -->
+            <div class="book-info-header" id="bookInfoHeader">
+                <div class="book-info-mini">
+                    <div class="book-mini-cover" id="bookMiniCover">
+                        <span class="no-image-text">No Image</span>
+                    </div>
+                    <div class="book-mini-details">
+                        <h3 id="bookTitle">Loading...</h3>
+                        <p id="bookAuthor">by Author</p>
+                    </div>
+                    <div class="book-actions">
+                        <a id="bookPageLink" class="btn-secondary btn-compact" href="#">Open Book Page</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Editor Container: Toolbar + Canvas -->
+            <div class="editor-container">
+                <!-- Left Toolbar -->
+                <div class="editor-toolbar-left">
+                    <div class="toolbar-section">
+                        <h4>Text</h4>
+                        <div class="toolbar-section buttons-grid" style="margin: 0; padding: 0; border: none; background: transparent;">
+                            <button class="tool-btn icon-btn" onclick="toggleBold()" title="Bold"><strong>B</strong></button>
+                            <button class="tool-btn icon-btn" onclick="toggleItalic()" title="Italic"><em>I</em></button>
+                            <button class="tool-btn icon-btn" onclick="toggleUnderline()" title="Underline"><u>U</u></button>
+                            <button class="tool-btn icon-btn" onclick="alignLeft()" title="Align Left"><span>L</span></button>
+                            <button class="tool-btn icon-btn" onclick="alignCenter()" title="Align Center"><span>C</span></button>
+                            <button class="tool-btn icon-btn" onclick="alignRight()" title="Align Right"><span>R</span></button>
+                        </div>
+                        <select id="fontSize" onchange="changeFontSize()">
+                            <option value="12">12px</option>
+                            <option value="16">16px</option>
+                            <option value="20" selected>20px</option>
+                            <option value="24">24px</option>
+                            <option value="32">32px</option>
+                            <option value="48">48px</option>
+                            <option value="64">64px</option>
+                            <option value="96">96px</option>
+                        </select>
+                    </div>
+
+                    <div class="toolbar-section buttons-grid">
+                        <h4>Edit</h4>
+                        <button class="tool-btn icon-btn" onclick="duplicateSelected()" title="Duplicate">Copy</button>
+                        <button class="tool-btn icon-btn" onclick="deleteSelected()" title="Delete">Del</button>
+                        <button class="tool-btn icon-btn" onclick="bringToFront()" title="Bring to front">Front</button>
+                        <button class="tool-btn icon-btn" onclick="sendToBack()" title="Send to back">Back</button>
+                    </div>
+
+                    <div class="toolbar-section">
+                        <h4>Drawing</h4>
+                        <div class="toolbar-section buttons-grid" style="margin: 0; padding: 0; border: none; background: transparent;">
+                            <button class="tool-btn icon-btn" id="drawBtn" onclick="toggleDrawing()" title="Toggle draw">Draw</button>
+                        </div>
+                        <label>Brush Size:</label>
+                        <input type="range" id="brushSize" min="1" max="20" value="5" onchange="changeBrushSize()">
+                    </div>
+
+                    <div class="toolbar-section buttons-grid">
+                        <h4>Transform</h4>
+                        <button class="tool-btn icon-btn" onclick="flipHorizontal()" title="Flip Horizontal">FlipH</button>
+                        <button class="tool-btn icon-btn" onclick="flipVertical()" title="Flip Vertical">FlipV</button>
+                        <button class="tool-btn icon-btn" onclick="rotateObject()" title="Rotate 90?">Rot90</button>
+                    </div>
+                </div>
+
+                <!-- Canvas Area with top toolbar -->
+                <div class="canvas-area">
+                    <div class="canvas-topbar">
+                        <div class="topbar-left">
+                            <button class="tool-btn icon-btn" onclick="addText()" title="Text">T</button>
+                            <button class="tool-btn icon-btn" onclick="document.getElementById('imageUpload').click()" title="Image">Img</button>
+                            <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="addImage(event)">
+                            <button class="tool-btn icon-btn" onclick="toggleStickerMenu()" title="Sticker">:)</button>
+                            <div class="topbar-divider"></div>
+                            <button class="tool-btn icon-btn" onclick="addRectangle()" title="Rectangle">Rect</button>
+                            <button class="tool-btn icon-btn" onclick="addCircle()" title="Circle">O</button>
+                            <button class="tool-btn icon-btn" onclick="addTriangle()" title="Triangle">Tri</button>
+                            <button class="tool-btn icon-btn" onclick="addLine()" title="Line">Line</button>
+                            <div class="topbar-divider"></div>
+                            <button class="tool-btn icon-btn" onclick="undoLast()" title="Undo">Undo</button>
+                            <button class="tool-btn icon-btn" onclick="clearCanvas()" title="Clear">Clear</button>
+                            <button class="tool-btn icon-btn" id="drawBtnTop" onclick="toggleDrawing()" title="Draw">Draw</button>
+                        </div>
+                        <div class="topbar-right">
+                            <div class="topbar-colors">
+                                <label title="Background"><span>BG</span><input type="color" id="bgColor" value="#404040" onchange="changeBackground()"></label>
+                                <label title="Fill"><span>Fill</span><input type="color" id="fillColor" value="#342E59" onchange="changeFillColor()"></label>
+                                <label title="Stroke"><span>Stroke</span><input type="color" id="strokeColor" value="#F2F2F2" onchange="changeStrokeColor()"></label>
+                                <label title="Text"><span>Txt</span><input type="color" id="textColor" value="#F2F2F2" onchange="changeTextColor()"></label>
+                            </div>
+                            <div class="topbar-divider"></div>
+                            <label class="topbar-checkbox" title="Make Public">
+                                <input type="checkbox" id="isPublic"> Public
+                            </label>
+                            <div class="topbar-divider"></div>
+                            <button class="btn-primary btn-compact" onclick="saveNote()">Save</button>
+                            <button class="btn-secondary btn-compact" onclick="exportPNG()">Download</button>
+                        </div>
+                    </div>
+<!-- Sticker Picker (Hidden by default) -->
+                    <div class="sticker-picker" id="stickerPicker" style="display: none;">
+                        <h4>Select Sticker</h4>
+                        <div class="sticker-grid">
+                            <span class="sticker-item" onclick="addSticker('dY~S')">dY~S</span>
+                            <span class="sticker-item" onclick="addSticker('???,?')">???,?</span>
+                            <span class="sticker-item" onclick="addSticker('?-?')">?-?</span>
+                            <span class="sticker-item" onclick="addSticker('dY"?')">dY"?</span>
+                            <span class="sticker-item" onclick="addSticker('dY'_')">dY'_</span>
+                            <span class="sticker-item" onclick="addSticker('dY`?')">dY`?</span>
+                            <span class="sticker-item" onclick="addSticker('dY"s')">dY"s</span>
+                            <span class="sticker-item" onclick="addSticker('?o"')">?o"</span>
+                            <span class="sticker-item" onclick="addSticker('dY'?')">dY'?</span>
+                            <span class="sticker-item" onclick="addSticker('dYZ"')">dYZ"</span>
+                            <span class="sticker-item" onclick="addSticker('dYZ-')">dYZ-</span>
+                            <span class="sticker-item" onclick="addSticker('dYZ?')">dYZ?</span>
+                            <span class="sticker-item" onclick="addSticker('dYOY')">dYOY</span>
+                            <span class="sticker-item" onclick="addSticker('dY'-')">dY'-</span>
+                            <span class="sticker-item" onclick="addSticker('dYO^')">dYO^</span>
+                            <span class="sticker-item" onclick="addSticker('dYZ_')">dYZ_</span>
+                            <span class="sticker-item" onclick="addSticker('dY?+')">dY?+</span>
+                            <span class="sticker-item" onclick="addSticker('dYZ?')">dYZ?</span>
+                            <span class="sticker-item" onclick="addSticker('dY"-')">dY"-</span>
+                            <span class="sticker-item" onclick="addSticker('dY"?')">dY"?</span>
+                        </div>
+                    </div>
+
+                    <!-- Canvas Container -->
+                    <div class="canvas-container-wrapper">
+                        <canvas id="noteCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/notes-editor.js"></script>
+</body>
+</html>

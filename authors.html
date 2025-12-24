@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authors - Book Tracker</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <h1>Book Tracker</h1>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">GENERAL</div>
+                <nav class="sidebar-nav">
+                    <a href="home.html" class="nav-item">Dashboard</a>
+                    <a href="add-book.html" class="nav-item">Add Book</a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MY LIBRARY</div>
+                <nav class="sidebar-nav">
+                    <a href="my-library.html" class="nav-item">My Library</a>
+                    <a href="currently-reading.html" class="nav-item">Currently Reading</a>
+                    <a href="want-to-read.html" class="nav-item">Want to Read</a>
+                    <a href="read.html" class="nav-item">Read</a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">BROWSE</div>
+                <nav class="sidebar-nav">
+                    <a href="books.html" class="nav-item">All Books</a>
+                    <a href="authors.html" class="nav-item active">Authors</a>
+                </nav>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div class="content-header">
+                <div class="header-spacer"></div>
+                <div class="user-controls">
+                    <span id="userDisplay"></span>
+                    <button id="darkModeToggle" class="btn-secondary">Toggle Dark Mode</button>
+                    <button id="adminBtn" class="btn-secondary" style="display: none;">Admin Panel</button>
+                    <button onclick="logout()" class="btn-secondary">Logout</button>
+                </div>
+            </div>
+            <div class="page-header">
+                <h2>Authors</h2>
+                <p>All authors in your collection</p>
+            </div>
+            <div class="gallery-controls">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search authors...">
+                </div>
+            </div>
+            <div class="gallery-grid" id="authorsGrid"></div>
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <h3>No Authors Yet</h3>
+                <p>Add some books to see authors in your collection</p>
+                <button class="btn-primary" onclick="window.location.href='add-book.html'" style="margin-top: 20px;">Add Your First Book</button>
+            </div>
+        </main>
+    </div>
+    <div class="modal" id="authorModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-details" style="grid-column: 1/-1;">
+                    <div class="detail-item">
+                        <div class="detail-label">Books by this Author</div>
+                        <div class="detail-value" id="modalBookCount"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Books List</div>
+                        <div id="authorBooksList" style="display: flex; flex-direction: column; gap: 10px; margin-top: 10px;"></div>
+                    </div>
+                    <div class="notes-section">
+                        <h3>Notes</h3>
+                        <div class="notes-tabs">
+                            <button class="tab-btn active" onclick="showNotes('personal')">Personal Notes</button>
+                            <button class="tab-btn" onclick="showNotes('public')">Public Notes</button>
+                        </div>
+                        <div class="notes-content" id="notesContent">
+                            <p style="color: var(--text-secondary);">No notes yet</p>
+                        </div>
+                        <button class="btn-secondary" onclick="editNotes()" style="margin-top: 10px; width: 100%;">Edit Notes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/authors.js"></script>
+</body>
+</html>

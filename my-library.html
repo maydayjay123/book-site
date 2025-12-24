@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Library - Book Tracker</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <h1>Book Tracker</h1>
+            </div>
+
+            <!-- General Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">GENERAL</div>
+                <nav class="sidebar-nav">
+                    <a href="home.html" class="nav-item">Dashboard</a>
+                    <a href="add-book.html" class="nav-item">Add Book</a>
+                </nav>
+            </div>
+
+            <!-- My Library Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MY LIBRARY</div>
+                <nav class="sidebar-nav">
+                    <a href="my-library.html" class="nav-item active">My Library</a>
+                    <a href="currently-reading.html" class="nav-item">Currently Reading</a>
+                    <a href="want-to-read.html" class="nav-item">Want to Read</a>
+                    <a href="read.html" class="nav-item">Read</a>
+                </nav>
+            </div>
+
+            <!-- Browse Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">BROWSE</div>
+                <nav class="sidebar-nav">
+                    <a href="books.html" class="nav-item">All Books</a>
+                    <a href="authors.html" class="nav-item">Authors</a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- User Controls (Top Right) -->
+            <div class="content-header">
+                <div class="header-spacer"></div>
+                <div class="user-controls">
+                    <span id="userDisplay"></span>
+                    <button id="darkModeToggle" class="btn-secondary">Toggle Dark Mode</button>
+                    <button id="adminBtn" class="btn-secondary" style="display: none;">Admin Panel</button>
+                    <button onclick="logout()" class="btn-secondary">Logout</button>
+                </div>
+            </div>
+
+            <div class="page-header">
+                <h2>My Library</h2>
+                <p>Books you own and have read</p>
+            </div>
+
+            <!-- Search and Filters -->
+            <div class="gallery-controls">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search your library...">
+                </div>
+                <div class="view-controls">
+                    <button class="btn-primary" onclick="window.location.href='add-book.html'">Add New Book</button>
+                </div>
+            </div>
+
+            <!-- Books Gallery -->
+            <div class="gallery-grid" id="libraryGrid">
+                <!-- Will be populated by JavaScript -->
+            </div>
+
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <h3>Your Library is Empty</h3>
+                <p>Start adding books you own to build your collection</p>
+                <button class="btn-primary" onclick="window.location.href='add-book.html'" style="margin-top: 20px;">Add Your First Book</button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Book Detail Modal -->
+    <div class="modal" id="bookModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image" id="modalImage">
+                    <span class="no-image-text">No Image</span>
+                </div>
+                <div class="modal-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Author</div>
+                        <div class="detail-value" id="modalAuthor"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Genre</div>
+                        <div class="detail-value" id="modalGenre"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Pages</div>
+                        <div class="detail-value" id="modalPages"></div>
+                    </div>
+                    
+                    <!-- Status Tags -->
+                    <div class="detail-item">
+                        <div class="detail-label">Status</div>
+                        <div class="status-tags" id="statusTags">
+                            <button class="status-tag" data-status="owned">Owned</button>
+                            <button class="status-tag" data-status="want">Want to Read</button>
+                            <button class="status-tag" data-status="reading">Reading</button>
+                            <button class="status-tag" data-status="read">Read</button>
+                        </div>
+                    </div>
+
+                    <!-- Rating -->
+                    <div class="detail-item">
+                        <div class="detail-label">Rating</div>
+                        <div class="star-rating" id="starRating">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                    </div>
+
+                    <!-- Review -->
+                    <div class="detail-item" style="flex-direction: column; align-items: flex-start;">
+                        <div class="detail-label">My Review</div>
+                        <textarea id="reviewText" placeholder="Write your review here..." 
+                                  style="width: 100%; min-height: 120px; margin-top: 10px; padding: 12px; 
+                                         background: var(--bg-secondary); border: 2px solid var(--border-color); 
+                                         border-radius: 8px; color: var(--text-primary); font-family: 'Times New Roman', Times, serif; 
+                                         font-size: 1rem; resize: vertical;"></textarea>
+                    </div>
+
+                    <div class="form-actions" style="margin-top: 20px;">
+                        <button class="btn-secondary" onclick="openNotesPage()">My Notes</button>
+                        <button class="btn-primary" onclick="saveBookChanges()">Save Changes</button>
+                        <button class="btn-danger" onclick="deleteBook()">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/my-library.js"></script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Author Details - Readers Paradise</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="detail-page">
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <button onclick="goBack()" class="btn-secondary">← Back</button>
+            <h1>📚 Readers Paradise</h1>
+        </div>
+        <div class="nav-right">
+            <button id="darkModeToggle" class="icon-btn" title="Toggle Dark Mode">🌙</button>
+            <button id="settingsBtn" class="btn-secondary" onclick="window.location.href='dashboard.html'">⚙️ Settings</button>
+            <button onclick="logout()" class="btn-secondary">Logout</button>
+        </div>
+    </nav>
+
+    <div class="detail-container">
+        <div class="author-detail-card">
+            <div class="author-header">
+                <h1>✍️ <span id="authorName"></span></h1>
+                <button class="btn-primary" id="editAuthorNotesBtn">Edit Notes</button>
+            </div>
+
+            <div class="author-notes-section">
+                <h2>About This Author</h2>
+                <div id="authorNotes" class="notes-content">
+                    <p class="no-notes">No notes about this author yet</p>
+                </div>
+            </div>
+
+            <div class="author-books-section">
+                <h2>Books by This Author (<span id="bookCount">0</span>)</h2>
+                <div id="authorBooksList" class="books-grid">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Author Notes Modal -->
+    <div class="modal" id="authorNotesModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Author Notes</h2>
+            <form id="authorNotesForm">
+                <div class="form-group">
+                    <label for="authorNotesInput">Notes about <span id="authorNameInModal"></span></label>
+                    <textarea id="authorNotesInput" rows="8" placeholder="Write about this author..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelNotesBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Notes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script src="js/author-detail.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Book Tracker</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <h1>Book Tracker</h1>
+            </div>
+
+            <!-- General Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">GENERAL</div>
+                <nav class="sidebar-nav">
+                    <a href="home.html" class="nav-item active">Dashboard</a>
+                    <a href="add-book.html" class="nav-item">Add Book</a>
+                </nav>
+            </div>
+
+            <!-- My Library Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MY LIBRARY</div>
+                <nav class="sidebar-nav">
+                    <a href="my-library.html" class="nav-item">My Library</a>
+                    <a href="currently-reading.html" class="nav-item">Currently Reading</a>
+                    <a href="want-to-read.html" class="nav-item">Want to Read</a>
+                    <a href="read.html" class="nav-item">Read</a>
+                </nav>
+            </div>
+
+            <!-- Browse Section -->
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">BROWSE</div>
+                <nav class="sidebar-nav">
+                    <a href="books.html" class="nav-item">All Books</a>
+                    <a href="authors.html" class="nav-item">Authors</a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- User Controls (Top Right) -->
+            <div class="content-header">
+                <div class="header-spacer"></div>
+                <div class="user-controls">
+                    <span id="userDisplay"></span>
+                    <button id="darkModeToggle" class="btn-secondary">Toggle Dark Mode</button>
+                    <button id="adminBtn" class="btn-secondary" style="display: none;">Admin Panel</button>
+                    <button onclick="logout()" class="btn-secondary">Logout</button>
+                </div>
+            </div>
+
+            <div class="page-header">
+                <h2>Welcome Back</h2>
+                <p>Your reading statistics and recent activity</p>
+            </div>
+
+            <!-- Statistics Cards -->
+            <div class="stat-cards-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Total Books</div>
+                        <div class="stat-value" id="totalBooks">0</div>
+                        <div class="stat-sublabel">In your library</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon green"></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Read</div>
+                        <div class="stat-value" id="booksRead">0</div>
+                        <div class="stat-sublabel">Completed books</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon orange"></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Want to Read</div>
+                        <div class="stat-value" id="wantToRead">0</div>
+                        <div class="stat-sublabel">On your wishlist</div>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon purple"></div>
+                    <div class="stat-content">
+                        <div class="stat-label">Currently Reading</div>
+                        <div class="stat-value" id="currentlyReading">0</div>
+                        <div class="stat-sublabel">Books in progress</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Currently Reading Section -->
+            <div class="page-header" style="margin-top: 40px;">
+                <h2>Currently Reading</h2>
+                <p>Books you are reading right now with progress</p>
+            </div>
+
+            <div class="gallery-grid" id="currentlyReadingList">
+                <!-- Will be populated by JavaScript -->
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="page-header" style="margin-top: 40px;">
+                <h2>Recent Activity</h2>
+                <p>Your latest books and updates</p>
+            </div>
+
+            <div class="gallery-grid" id="recentActivity">
+                <!-- Will be populated by JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/home.js"></script>
+</body>
+</html>

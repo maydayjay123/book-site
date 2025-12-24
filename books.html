@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Books - Book Tracker</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <h1>Book Tracker</h1>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">GENERAL</div>
+                <nav class="sidebar-nav">
+                    <a href="home.html" class="nav-item">Dashboard</a>
+                    <a href="add-book.html" class="nav-item">Add Book</a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MY LIBRARY</div>
+                <nav class="sidebar-nav">
+                    <a href="my-library.html" class="nav-item">My Library</a>
+                    <a href="currently-reading.html" class="nav-item">Currently Reading</a>
+                    <a href="want-to-read.html" class="nav-item">Want to Read</a>
+                    <a href="read.html" class="nav-item">Read</a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">BROWSE</div>
+                <nav class="sidebar-nav">
+                    <a href="books.html" class="nav-item active">All Books</a>
+                    <a href="authors.html" class="nav-item">Authors</a>
+                </nav>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div class="content-header">
+                <div class="header-spacer"></div>
+                <div class="user-controls">
+                    <span id="userDisplay"></span>
+                    <button id="darkModeToggle" class="btn-secondary">Toggle Dark Mode</button>
+                    <button id="adminBtn" class="btn-secondary" style="display: none;">Admin Panel</button>
+                    <button onclick="logout()" class="btn-secondary">Logout</button>
+                </div>
+            </div>
+            <div class="page-header">
+                <h2>All Books</h2>
+                <p>Complete database of all books</p>
+            </div>
+            <div class="gallery-controls">
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search all books...">
+                </div>
+                <div class="view-controls">
+                    <button class="btn-primary" onclick="window.location.href='add-book.html'">Add New Book</button>
+                </div>
+            </div>
+            <div class="gallery-grid" id="booksGrid"></div>
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <h3>No Books in Database</h3>
+                <p>Add your first book to get started</p>
+                <button class="btn-primary" onclick="window.location.href='add-book.html'" style="margin-top: 20px;">Add Book</button>
+            </div>
+        </main>
+    </div>
+    <div class="modal" id="bookModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle"></h2>
+                <button class="close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-image" id="modalImage">
+                    <span class="no-image-text">No Image</span>
+                </div>
+                <div class="modal-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Author</div>
+                        <div class="detail-value" id="modalAuthor"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Genre</div>
+                        <div class="detail-value" id="modalGenre"></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Pages</div>
+                        <div class="detail-value" id="modalPages"></div>
+                    </div>
+                    <div class="detail-item" id="descItem" style="display:none;">
+                        <div class="detail-label">Description</div>
+                        <div class="detail-value" id="modalDesc"></div>
+                    </div>
+                    <div class="detail-item" id="statusItem">
+                        <div class="detail-label">Your Status</div>
+                        <div class="detail-value" id="modalUserStatus"></div>
+                    </div>
+                    <div class="notes-section">
+                        <h3>Notes</h3>
+                        <div class="notes-tabs">
+                            <button class="tab-btn active" onclick="showNotes('personal')">Personal Notes</button>
+                            <button class="tab-btn" onclick="showNotes('public')">Public Notes</button>
+                        </div>
+                        <div class="notes-content" id="notesContent">
+                            <p style="color: var(--text-secondary);">No notes yet</p>
+                        </div>
+                        <button class="btn-secondary" onclick="editNotes()" style="margin-top: 10px; width: 100%;">Edit Notes</button>
+                    </div>
+                    <div class="form-actions" style="margin-top: 20px;">
+                        <button class="btn-primary" id="addToLibraryBtn" onclick="addToLibrary()">Add to My Library</button>
+                        <button class="btn-secondary" onclick="editBook()">Edit Book</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/books.js"></script>
+</body>
+</html>

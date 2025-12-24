@@ -1,0 +1,19 @@
+{
+  "name": "readers-paradise",
+  "version": "2.0.0",
+  "description": "Personal reading tracker with multi-user support",
+  "scripts": {
+    "dev": "live-server --port=3000 --open=/index.html",
+    "start": "live-server --port=3000"
+  },
+  "keywords": [
+    "reading",
+    "books",
+    "tracker"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  }
+}

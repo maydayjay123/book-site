@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Readers Paradise</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Top Banner -->
+    <div class="top-banner">
+        <img src="images/banner.png" alt="Readers Paradise" class="banner-image">
+        <div class="top-nav-right">
+            <span id="userDisplay" class="user-name"></span>
+            <button id="darkModeToggle" class="icon-btn" title="Toggle Dark Mode">Toggle Theme</button>
+            <button id="settingsBtn" class="btn-secondary">Settings</button>
+            <button id="adminBtn" class="btn-secondary" style="display: none;">Admin Panel</button>
+            <button onclick="logout()" class="btn-secondary">Logout</button>
+        </div>
+    </div>
+
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-item active">Home</a>
+                <a href="my-library.html" class="nav-item">My Library</a>
+                <a href="currently-reading.html" class="nav-item">Currently Reading</a>
+                <a href="want-to-read.html" class="nav-item">Want to Read</a>
+                <a href="read.html" class="nav-item">Read</a>
+                <a href="authors.html" class="nav-item">Authors</a>
+                <a href="books.html" class="nav-item">Books</a>
+                <a href="add-book.html" class="nav-item">Add Book</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Home View -->
+            <div id="homeView" class="content-view active">
+                <h2>Welcome to Readers Paradise</h2>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Books</h3>
+                        <p class="stat-number" id="totalBooks">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Books Read</h3>
+                        <p class="stat-number" id="booksRead">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Currently Reading</h3>
+                        <p class="stat-number" id="currentlyReading">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Want to Read</h3>
+                        <p class="stat-number" id="wantToRead">0</p>
+                    </div>
+                </div>
+
+                <div class="reading-challenge-section">
+                    <h3>2026 Reading Challenge</h3>
+                    <div class="challenge-content">
+                        <div class="progress-bar-wrapper">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="challengeProgress"></div>
+                            </div>
+                            <p class="progress-text">
+                                <span id="challengeCount">0</span> of <span id="challengeGoal">20</span> books
+                                (<span id="challengePercentage">0%</span>)
+                            </p>
+                        </div>
+                        <button class="btn-secondary" id="editChallengeBtn">Edit Goal</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- My Library View -->
+            <div id="myLibraryView" class="content-view">
+                <h2>My Library</h2>
+                <p class="section-description">Books you own</p>
+                <div id="myLibraryGrid" class="gallery-grid"></div>
+            </div>
+
+            <!-- Want to Read View -->
+            <div id="wantToReadView" class="content-view">
+                <h2>Want to Read</h2>
+                <p class="section-description">Books on your reading list</p>
+                <div id="wantToReadGrid" class="gallery-grid"></div>
+            </div>
+
+            <!-- Authors View -->
+            <div id="authorsView" class="content-view">
+                <h2>Authors</h2>
+                <p class="section-description">All authors in your collection</p>
+                <div id="authorsGrid" class="gallery-grid"></div>
+            </div>
+
+            <!-- Books View -->
+            <div id="booksView" class="content-view">
+                <h2>All Books</h2>
+                <p class="section-description">Complete book database</p>
+                <div id="allBooksGrid" class="gallery-grid"></div>
+            </div>
+
+            <!-- Add Book View -->
+            <div id="addBookView" class="content-view">
+                <h2>Add New Book</h2>
+                <form id="addBookForm" class="add-book-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookTitle">Title</label>
+                            <input type="text" id="bookTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookAuthor">Author</label>
+                            <input type="text" id="bookAuthor" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookGenre">Genre</label>
+                            <input type="text" id="bookGenre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookPages">Total Pages</label>
+                            <input type="number" id="bookPages" min="1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bookStatus">Status</label>
+                            <select id="bookStatus" required>
+                                <option value="want-to-read">Want to Read</option>
+                                <option value="reading">Currently Reading</option>
+                                <option value="read">Read</option>
+                                <option value="owned">Owned</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookRating">Rating (1-5)</label>
+                            <input type="number" id="bookRating" min="1" max="5" step="0.5">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bookImage">Book Cover Image</label>
+                        <input type="file" id="bookImage" accept="image/*">
+                        <div id="imagePreview" class="image-preview"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bookPrivateNotes">Private Notes</label>
+                        <textarea id="bookPrivateNotes" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="bookPublicNotes">Public Notes (visible to others)</label>
+                        <textarea id="bookPublicNotes" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="reset" class="btn-secondary">Clear</button>
+                        <button type="submit" class="btn-primary">Add Book</button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Book Details Modal -->
+    <div class="modal" id="bookModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="bookDetails"></div>
+        </div>
+    </div>
+
+    <!-- Author Details Modal -->
+    <div class="modal" id="authorModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="authorDetails"></div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Settings</h2>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" required minlength="4">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm New Password</label>
+                    <input type="password" id="confirmPassword" required minlength="4">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelPasswordBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Update Password</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Challenge Goal Modal -->
+    <div class="modal" id="challengeModal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Set Reading Challenge Goal</h2>
+            <form id="challengeForm">
+                <div class="form-group">
+                    <label for="challengeGoalInput">Books to Read in 2026</label>
+                    <input type="number" id="challengeGoalInput" min="1" required>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary" id="cancelChallengeBtn">Cancel</button>
+                    <button type="submit" class="btn-primary">Save Goal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

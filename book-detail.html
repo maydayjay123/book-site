@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Page</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-logo">
+                <h1>Book Tracker</h1>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">GENERAL</div>
+                <nav class="sidebar-nav">
+                    <a href="home.html" class="nav-item">Dashboard</a>
+                    <a href="add-book.html" class="nav-item">Add Book</a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">MY LIBRARY</div>
+                <nav class="sidebar-nav">
+                    <a href="my-library.html" class="nav-item">My Library</a>
+                    <a href="currently-reading.html" class="nav-item">Currently Reading</a>
+                    <a href="want-to-read.html" class="nav-item">Want to Read</a>
+                    <a href="read.html" class="nav-item">Read</a>
+                </nav>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-section-title">BROWSE</div>
+                <nav class="sidebar-nav">
+                    <a href="books.html" class="nav-item">All Books</a>
+                    <a href="authors.html" class="nav-item">Authors</a>
+                </nav>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="content-header">
+                <div class="header-spacer"></div>
+                <div class="user-controls">
+                    <button onclick="history.back()" class="btn-secondary">← Back</button>
+                    <span id="userDisplay"></span>
+                    <button onclick="logout()" class="btn-secondary">Logout</button>
+                </div>
+            </div>
+
+            <div class="book-hero">
+                <div class="hero-cover" id="heroCover">
+                    <span class="no-image-text">No Image</span>
+                </div>
+                <div class="hero-meta">
+                    <div class="hero-top">
+                        <div>
+                            <h1 id="heroTitle">Loading...</h1>
+                            <p id="heroAuthor">by Author</p>
+                        </div>
+                        <div class="hero-actions">
+                            <a id="openNotes" class="btn-primary">Open Canvas</a>
+                            <a id="openAddNote" class="btn-secondary">New Note</a>
+                        </div>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="pill"><span id="statMyNotes">0</span> My Notes</div>
+                        <div class="pill"><span id="statPublicNotes">0</span> Public Notes</div>
+                        <div class="pill"><span id="statPeople">0</span> People</div>
+                        <div class="pill pill-status" id="statStatus">Status: -</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="book-tabs">
+                <button class="tab-btn active" data-tab="overview">Overview</button>
+                <button class="tab-btn" data-tab="my-notes">My Notes</button>
+                <button class="tab-btn" data-tab="public-notes">Public Notes</button>
+            </div>
+
+            <div class="tab-panel active" id="tab-overview">
+                <div class="social-grid">
+                    <section class="card-panel">
+                        <h3>Book Info</h3>
+                        <div class="info-grid">
+                            <div><span class="label">Genre</span><span id="infoGenre">-</span></div>
+                            <div><span class="label">Pages</span><span id="infoPages">-</span></div>
+                            <div><span class="label">Status</span><span id="infoStatus">-</span></div>
+                        </div>
+                    </section>
+
+                    <section class="card-panel">
+                        <h3>Activity</h3>
+                        <ul class="activity-list" id="activityList"></ul>
+                    </section>
+                </div>
+            </div>
+
+            <div class="tab-panel" id="tab-my-notes">
+                <div id="myNotesGrid" class="notes-grid"></div>
+                <p id="myNotesEmpty" class="muted">No notes yet. Create one from the canvas.</p>
+            </div>
+
+            <div class="tab-panel" id="tab-public-notes">
+                <div id="publicNotesGrid" class="notes-grid"></div>
+                <p id="publicNotesEmpty" class="muted">No public notes yet.</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/book-detail.js"></script>
+</body>
+</html>
