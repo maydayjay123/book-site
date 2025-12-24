@@ -8,6 +8,14 @@ let userData = getUserData();
 let currentView = 'all';
 let editingBookId = null;
 
+function getLibraryBooks() {
+    const userBooks = JSON.parse(localStorage.getItem(`userBooks_${currentUser.id}`) || '[]');
+    if (Array.isArray(userBooks) && userBooks.length > 0) {
+        return userBooks;
+    }
+    return Array.isArray(userData.books) ? userData.books : [];
+}
+
 // DOM elements
 const userDisplay = document.getElementById('userDisplay');
 const darkModeToggle = document.getElementById('darkModeToggle');
@@ -317,7 +325,7 @@ function displayBooks(filter = 'all') {
 
 // Display currently reading
 function displayCurrentlyReading() {
-    const readingBooks = userData.books.filter((book) => {
+    const readingBooks = getLibraryBooks().filter((book) => {
         if (book.statuses && Array.isArray(book.statuses)) {
             return book.statuses.includes('reading');
         }
@@ -374,8 +382,20 @@ function editBook(bookId) {
 
 // Update statistics
 function updateStatistics() {
-    const totalBooks = userData.books.length;
-    const readBooks = userData.books.filter(b => b.status === 'read');
+    const libraryBooks = getLibraryBooks();
+    const totalBooks = libraryBooks.length;
+    const readBooks = libraryBooks.filter((book) => {
+        if (book.statuses && Array.isArray(book.statuses)) {
+            return book.statuses.includes('read');
+        }
+        return book.status === 'read';
+    });
+    const currentlyReading = libraryBooks.filter((book) => {
+        if (book.statuses && Array.isArray(book.statuses)) {
+            return book.statuses.includes('reading');
+        }
+        return book.status === 'reading';
+    });
     const totalPages = readBooks.reduce((sum, book) => sum + book.totalPages, 0);
     const avgRating = readBooks.length > 0 
         ? (readBooks.reduce((sum, book) => sum + (book.rating || 0), 0) / readBooks.filter(b => b.rating).length).toFixed(1)
@@ -383,6 +403,7 @@ function updateStatistics() {
     
     document.getElementById('totalBooks').textContent = totalBooks;
     document.getElementById('booksRead').textContent = readBooks.length;
+    document.getElementById('currentlyReading').textContent = currentlyReading.length;
     document.getElementById('totalPages').textContent = totalPages.toLocaleString();
     document.getElementById('avgRating').textContent = avgRating || 'N/A';
 }

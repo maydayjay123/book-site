@@ -6,13 +6,19 @@ async function loadHomeData() {
     try {
         // Get user's books
         const userBooks = await API.getUserBooks(currentUser.id);
+        const hasStatus = (book, status) => {
+            if (book.statuses && Array.isArray(book.statuses)) {
+                return book.statuses.includes(status);
+            }
+            return book.status === status;
+        };
         
         // Calculate statistics
         const totalBooks = userBooks.length;
-        const ownedBooks = userBooks.filter(b => b.status === 'owned').length;
-        const wantToRead = userBooks.filter(b => b.status === 'want').length;
-        const currentlyReading = userBooks.filter(b => b.status === 'reading').length;
-        const readBooks = userBooks.filter(b => b.status === 'read').length;
+        const ownedBooks = userBooks.filter((b) => hasStatus(b, 'owned')).length;
+        const wantToRead = userBooks.filter((b) => hasStatus(b, 'want')).length;
+        const currentlyReading = userBooks.filter((b) => hasStatus(b, 'reading')).length;
+        const readBooks = userBooks.filter((b) => hasStatus(b, 'read')).length;
         
         // Update stat cards
         document.getElementById('totalBooks').textContent = totalBooks;
@@ -21,7 +27,7 @@ async function loadHomeData() {
         document.getElementById('currentlyReading').textContent = currentlyReading;
         
         // Display currently reading books with progress
-        displayCurrentlyReading(userBooks.filter(b => b.status === 'reading'));
+        displayCurrentlyReading(userBooks.filter((b) => hasStatus(b, 'reading')));
         
         // Display recent activity (last 8 books added)
         displayRecentActivity(userBooks.slice(0, 8));
@@ -45,8 +51,11 @@ function displayCurrentlyReading(books) {
     }
     
     container.innerHTML = books.map(book => {
-        const progress = book.current_page && book.pages ? 
-            Math.round((book.current_page / book.pages) * 100) : 0;
+        const currentPage = book.currentPage || book.current_page || 0;
+        const totalPages = book.pages || book.totalPages || 0;
+        const progress = totalPages > 0 
+            ? Math.round((currentPage / totalPages) * 100) 
+            : 0;
         
         return `
             <div class="gallery-card">
@@ -62,13 +71,13 @@ function displayCurrentlyReading(books) {
                     <div class="card-info">
                         <span>${book.genre || 'Unknown Genre'}</span>
                     </div>
-                    ${book.current_page && book.pages ? `
+                    ${totalPages > 0 ? `
                         <div style="margin-top: 10px;">
                             <div style="background: var(--bg-secondary); border-radius: 8px; height: 8px; overflow: hidden;">
                                 <div style="background: var(--color-success); height: 100%; width: ${progress}%; transition: width 0.3s;"></div>
                             </div>
                             <div style="margin-top: 5px; font-size: 0.9rem; color: var(--text-secondary);">
-                                ${progress}% complete (${book.current_page} / ${book.pages} pages)
+                                ${progress}% complete (${currentPage} / ${totalPages} pages)
                             </div>
                         </div>
                     ` : ''}
@@ -91,7 +100,30 @@ function displayRecentActivity(books) {
         return;
     }
     
-    container.innerHTML = books.map(book => `
+    container.innerHTML = books.map(book => {
+        const statuses = book.statuses && Array.isArray(book.statuses)
+            ? book.statuses
+            : (book.status ? [book.status] : []);
+
+        const badgeHTML = statuses.map((status) => {
+            if (status === 'owned') {
+                return '<span class="badge owned">Owned</span>';
+            }
+            if (status === 'want') {
+                return '<span class="badge want">Want to Read</span>';
+            }
+            if (status === 'reading') {
+                return '<span class="badge reading">Reading</span>';
+            }
+            if (status === 'read') {
+                return '<span class="badge read">Read</span>';
+            }
+            return '';
+        }).join('');
+
+        const totalPages = book.pages || book.totalPages;
+
+        return `
         <div class="gallery-card">
             <div class="card-image ${book.image_url ? '' : 'no-image'}">
                 ${book.image_url ? 
@@ -104,17 +136,15 @@ function displayRecentActivity(books) {
                 <div class="card-subtitle">by ${book.author}</div>
                 <div class="card-info">
                     <span>${book.genre || 'Unknown Genre'}</span>
-                    ${book.pages ? `<span>${book.pages} pages</span>` : ''}
+                    ${totalPages ? `<span>${totalPages} pages</span>` : ''}
                 </div>
                 <div class="card-badges">
-                    ${book.status === 'owned' ? '<span class="badge owned">Owned</span>' : ''}
-                    ${book.status === 'want' ? '<span class="badge want">Want to Read</span>' : ''}
-                    ${book.status === 'reading' ? '<span class="badge reading">Reading</span>' : ''}
-                    ${book.status === 'read' ? '<span class="badge read">Read</span>' : ''}
+                    ${badgeHTML}
                 </div>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
 // Load data on page load
