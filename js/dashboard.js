@@ -282,7 +282,12 @@ function displayBooks(filter = 'all') {
 
 // Display currently reading
 function displayCurrentlyReading() {
-    const readingBooks = userData.books.filter(b => b.status === 'reading');
+    const readingBooks = userData.books.filter((book) => {
+        if (book.statuses && Array.isArray(book.statuses)) {
+            return book.statuses.includes('reading');
+        }
+        return book.status === 'reading';
+    });
     
     if (readingBooks.length === 0) {
         currentlyReadingList.innerHTML = '<p style="color: var(--text-secondary);">No books currently being read</p>';
