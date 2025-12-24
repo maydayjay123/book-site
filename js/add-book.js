@@ -180,6 +180,34 @@ async function selectBook(book) {
             genreSelect.value = 'Drama';
             genreMatched = true;
             console.log('Genre set to: Drama');
+        } else if (subjectsLower.includes('theatre') || subjectsLower.includes('theater')) {
+            genreSelect.value = 'Theatre';
+            genreMatched = true;
+            console.log('Genre set to: Theatre');
+        } else if (subjectsLower.includes('classic') || subjectsLower.includes('classics')) {
+            genreSelect.value = 'Classic';
+            genreMatched = true;
+            console.log('Genre set to: Classic');
+        } else if (subjectsLower.includes('literary fiction') || subjectsLower.includes('literary')) {
+            genreSelect.value = 'Literary Fiction';
+            genreMatched = true;
+            console.log('Genre set to: Literary Fiction');
+        } else if (subjectsLower.includes('19th century') || subjectsLower.includes('19th-century') || subjectsLower.includes('nineteenth century')) {
+            genreSelect.value = '19th Century Lit';
+            genreMatched = true;
+            console.log('Genre set to: 19th Century Lit');
+        } else if (subjectsLower.includes('20th century') || subjectsLower.includes('20th-century') || subjectsLower.includes('twentieth century')) {
+            genreSelect.value = '20th Century Lit';
+            genreMatched = true;
+            console.log('Genre set to: 20th Century Lit');
+        } else if (subjectsLower.includes('philosophy') || subjectsLower.includes('philosophical')) {
+            genreSelect.value = 'Philosophy';
+            genreMatched = true;
+            console.log('Genre set to: Philosophy');
+        } else if (subjectsLower.includes('religion') || subjectsLower.includes('religious') || subjectsLower.includes('theology')) {
+            genreSelect.value = 'Religion';
+            genreMatched = true;
+            console.log('Genre set to: Religion');
         } else if (subjectsLower.includes('self-help') || subjectsLower.includes('self help') || subjectsLower.includes('self improvement')) {
             genreSelect.value = 'Self-Help';
             genreMatched = true;
