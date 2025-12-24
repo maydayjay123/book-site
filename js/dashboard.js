@@ -38,8 +38,40 @@ if (currentUser.isAdmin === true) {
 // Get user data
 function getUserData() {
     const data = localStorage.getItem(`userData_${currentUser.id}`);
+    const userBooks = JSON.parse(localStorage.getItem(`userBooks_${currentUser.id}`) || '[]');
     if (data) {
-        return JSON.parse(data);
+        const parsed = JSON.parse(data);
+        if (Array.isArray(userBooks) && userBooks.length > 0) {
+            if (Array.isArray(parsed.books) && parsed.books.length > 0) {
+                const legacyById = new Map(parsed.books.map((book) => [book.id, book]));
+                let updated = false;
+                const mergedUserBooks = userBooks.map((book) => {
+                    const legacy = legacyById.get(book.id);
+                    if (!legacy) {
+                        return book;
+                    }
+                    const merged = { ...legacy, ...book };
+                    if (!merged.status && legacy.status) {
+                        merged.status = legacy.status;
+                        updated = true;
+                    }
+                    if ((!Array.isArray(merged.statuses) || merged.statuses.length === 0) && Array.isArray(legacy.statuses) && legacy.statuses.length > 0) {
+                        merged.statuses = [...legacy.statuses];
+                        updated = true;
+                    }
+                    return merged;
+                });
+                const mergedIds = new Set(mergedUserBooks.map((book) => book.id));
+                const legacyOnly = parsed.books.filter((book) => !mergedIds.has(book.id));
+                parsed.books = mergedUserBooks.concat(legacyOnly);
+                if (updated) {
+                    localStorage.setItem(`userBooks_${currentUser.id}`, JSON.stringify(mergedUserBooks));
+                }
+            } else {
+                parsed.books = userBooks;
+            }
+        }
+        return parsed;
     }
     // Initialize default data
     const defaultData = {
@@ -51,6 +83,9 @@ function getUserData() {
             completed: 0
         }
     };
+    if (Array.isArray(userBooks) && userBooks.length > 0) {
+        defaultData.books = userBooks;
+    }
     saveUserData(defaultData);
     return defaultData;
 }
